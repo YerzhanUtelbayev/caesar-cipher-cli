@@ -1,59 +1,57 @@
-const alphabetString = 'abcdefghijklmnopqrstuvwxyz'
-
-const encode = (inputString, inputNumber = 1) => {
+const convert = (cipherString) => (inputString, inputNumber, getIndex) => {
   if (typeof inputString !== 'string') return
 
-  const alphabet = alphabetString.split('')
-  const lastElIndex = alphabet.length - 1
+  const cipherMap = cipherString.split('')
+  const lastElIndex = cipherMap.length - 1
   const shiftNumber = inputNumber % lastElIndex
   const inputSymbolsList = inputString.split('')
 
   const encodedList = inputSymbolsList.map((value) => {
     const lowCaseValue = value.toLowerCase()
-    const alphabetIndex = alphabet.indexOf(lowCaseValue)
+    const alphabetIndex = cipherMap.indexOf(lowCaseValue)
 
-    if (alphabetIndex === -1) return lowCaseValue
-
-    const shiftedIndex = alphabetIndex + shiftNumber
-
-    const encodedElIndex =
-      shiftedIndex > lastElIndex ? shiftedIndex - alphabet.length : shiftedIndex
+    const encodedElIndex = getIndex(alphabetIndex, cipherMap.length, shiftNumber)
 
     if (value === lowCaseValue) {
-      return alphabet[encodedElIndex]
+      return cipherMap[encodedElIndex]
     } else {
-      return alphabet[encodedElIndex].toUpperCase()
+      return cipherMap[encodedElIndex].toUpperCase()
     }
   })
 
   return encodedList.join('')
 }
 
-const decode = (inputString, inputNumber = 1) => {
-  if (typeof inputString !== 'string') return
+class Cipher {
+  constructor (cipherString) {
+    this._convert = convert(cipherString)
+  }
 
-  const alphabet = alphabetString.split('')
-  const lastElIndex = alphabet.length - 1
-  const shiftNumber = inputNumber % lastElIndex
-  const inputSymbolsList = inputString.split('')
+  _getShiftedIndex (mapIndex, mapLength, shiftNumber) {
+    const shiftedIndex = mapIndex + shiftNumber
 
-  const decodedList = inputSymbolsList.map((value) => {
-    const lowCaseValue = value.toLowerCase()
-    const alphabetIndex = alphabet.indexOf(lowCaseValue)
-
-    if (alphabetIndex === -1) return lowCaseValue
-
-    const shiftedIndex = alphabetIndex - shiftNumber
-
-    const decodedElIndex =
-      shiftedIndex >= 0 ? shiftedIndex : alphabet.length - shiftedIndex
-
-    if (value === lowCaseValue) {
-      return alphabet[decodedElIndex]
-    } else {
-      return alphabet[decodedElIndex].toUpperCase()
+    if (shiftedIndex > mapLength - 1) {
+      return shiftedIndex - mapLength
     }
-  })
+    return shiftedIndex
+  }
 
-  return decodedList.join('')
+  _getUnshiftedIndex (mapIndex, mapLength, shiftNumber) {
+    const shiftedIndex = mapIndex - shiftNumber
+
+    if (shiftedIndex >= 0) {
+      return shiftedIndex
+    }
+    return mapLength - shiftedIndex
+  }
+
+  encode (inputString, inputNumber) {
+    return this._convert(inputString, inputNumber, this._getShiftedIndex)
+  }
+
+  decode (inputString, inputNumber) {
+    return this._convert(inputString, inputNumber, this._getUnshiftedIndex)
+  }
 }
+
+module.exports = Cipher
