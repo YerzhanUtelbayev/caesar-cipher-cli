@@ -1,59 +1,59 @@
-const alphabetString = 'abcdefghijklmnopqrstuvwxyz';
+const alphabetString = 'abcdefghijklmnopqrstuvwxyz'
 
 const encode = (inputString, inputNumber = 1) => {
-  if (typeof inputString !== 'string') return;
+  if (typeof inputString !== 'string') return
 
-  const alphabet = alphabetString.split('');
-  const lastElIndex = alphabet.length - 1;
-  const shiftNumber = inputNumber % lastElIndex;
-  const inputSymbolsList = inputString.split('');
+  const alphabet = alphabetString.split('')
+  const lastElIndex = alphabet.length - 1
+  const shiftNumber = inputNumber % lastElIndex
+  const inputSymbolsList = inputString.split('')
 
   const encodedList = inputSymbolsList.map((value) => {
-    const lowCaseValue = value.toLowerCase();
-    const alphabetIndex = alphabet.indexOf(lowCaseValue);
+    const lowCaseValue = value.toLowerCase()
+    const alphabetIndex = alphabet.indexOf(lowCaseValue)
 
-    if (alphabetIndex === -1) return lowCaseValue;
+    if (alphabetIndex === -1) return lowCaseValue
 
-    const shiftedIndex = alphabetIndex + shiftNumber;
+    const shiftedIndex = alphabetIndex + shiftNumber
 
     const encodedElIndex =
-      shiftedIndex > lastElIndex ? shiftedIndex - lastElIndex : shiftedIndex;
+      shiftedIndex > lastElIndex ? shiftedIndex - alphabet.length : shiftedIndex
 
     if (value === lowCaseValue) {
-      return alphabet[encodedElIndex];
+      return alphabet[encodedElIndex]
     } else {
-      return alphabet[encodedElIndex].toUpperCase();
+      return alphabet[encodedElIndex].toUpperCase()
     }
-  });
+  })
 
-  return encodedList.join('');
-};
+  return encodedList.join('')
+}
 
 const decode = (inputString, inputNumber = 1) => {
-  if (typeof inputString !== 'string') return;
+  if (typeof inputString !== 'string') return
 
-  const alphabet = alphabetString.split('');
-  const lastElIndex = alphabet.length - 1;
-  const shiftNumber = inputNumber % lastElIndex;
-  const inputSymbolsList = inputString.split('');
+  const alphabet = alphabetString.split('')
+  const lastElIndex = alphabet.length - 1
+  const shiftNumber = inputNumber % lastElIndex
+  const inputSymbolsList = inputString.split('')
 
   const decodedList = inputSymbolsList.map((value) => {
-    const lowCaseValue = value.toLowerCase();
-    const alphabetIndex = alphabet.indexOf(lowCaseValue);
+    const lowCaseValue = value.toLowerCase()
+    const alphabetIndex = alphabet.indexOf(lowCaseValue)
 
-    if (alphabetIndex === -1) return lowCaseValue;
+    if (alphabetIndex === -1) return lowCaseValue
 
-    const shiftedIndex = alphabetIndex - shiftNumber;
+    const shiftedIndex = alphabetIndex - shiftNumber
 
     const decodedElIndex =
-      shiftedIndex >= 0 ? shiftedIndex : lastElIndex - shiftedIndex;
+      shiftedIndex >= 0 ? shiftedIndex : alphabet.length - shiftedIndex
 
     if (value === lowCaseValue) {
-      return alphabet[decodedElIndex];
+      return alphabet[decodedElIndex]
     } else {
-      return alphabet[decodedElIndex].toUpperCase();
+      return alphabet[decodedElIndex].toUpperCase()
     }
-  });
+  })
 
-  return decodedList.join('');
-};
+  return decodedList.join('')
+}
