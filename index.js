@@ -1,13 +1,25 @@
-const Cipher = require('./src')
+const { pipeline } = require('stream')
 
-const alphabetString = 'abcdefghijklmnopqrstuvwxyz'
+const program = require('./src/optionsParser')
+const validate = require('./src/validator')
+const CipherTransform = require('./src/transformStream')
 
-const cipher = new Cipher(alphabetString)
+program.parse(process.argv)
 
-const input = 'abcde'
-const secret = 2
+const rawOptions = program.opts()
 
-const encodedValue = cipher.encode(input, secret)
-console.log(encodedValue)
-const decodedValue = cipher.decode(encodedValue, secret)
-console.log(decodedValue)
+const options = validate(rawOptions)
+const transform = new CipherTransform(options)
+
+pipeline(
+  process.stdin,
+  transform,
+  process.stdout,
+  err => {
+    if (err) {
+      console.log('Pipeline failed: ')
+    } else {
+      console.log('Pipeline succeeded.')
+    }
+  }
+)
