@@ -10,27 +10,35 @@ program.parse(process.argv)
 
 const rawOptions = program.opts()
 
-const options = validate(rawOptions)
-const transform = new CipherTransform(options)
+try {
+  const options = validate(rawOptions)
+  const transform = new CipherTransform(options)
 
-const readable = options.inputFile ? fs.createReadStream(getAbsolutePath(options.inputFile), {
-  encoding: 'utf8'
-}) : null
+  const readable = options.inputFile
+    ? fs.createReadStream(getAbsolutePath(options.inputFile), {
+      encoding: 'utf8'
+    })
+    : null
 
-const writeable = options.outputFile ? fs.createWriteStream(getAbsolutePath(options.outputFile), {
-  encoding: 'utf8',
-  flags: 'a+'
-}) : null
+  const writeable = options.outputFile
+    ? fs.createWriteStream(getAbsolutePath(options.outputFile), {
+      encoding: 'utf8',
+      flags: 'a+'
+    })
+    : null
 
-pipeline(
-  options.inputFile ? readable : process.stdin,
-  transform,
-  options.outputFile ? writeable : process.stdout,
-  err => {
-    if (err) {
-      console.log('Pipeline failed: ')
-    } else {
-      console.log('Pipeline succeeded.')
+  pipeline(
+    options.inputFile ? readable : process.stdin,
+    transform,
+    options.outputFile ? writeable : process.stdout,
+    (err) => {
+      if (err) {
+        console.error('Pipeline failed: ')
+      } else {
+        console.log('Pipeline succeeded.')
+      }
     }
-  }
-)
+  )
+} catch (error) {
+  process.stderr.write(`${error.message}\n`)
+}
