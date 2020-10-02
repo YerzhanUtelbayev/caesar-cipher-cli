@@ -8,9 +8,11 @@ const convert = (cipherString) => (inputString, inputNumber, getIndex) => {
 
   const encodedList = inputSymbolsList.map((value) => {
     const lowCaseValue = value.toLowerCase()
-    const alphabetIndex = cipherMap.indexOf(lowCaseValue)
+    const cipherMapIndex = cipherMap.indexOf(lowCaseValue)
 
-    const encodedElIndex = getIndex(alphabetIndex, cipherMap.length, shiftNumber)
+    if (cipherMapIndex < 0) return value
+
+    const encodedElIndex = getIndex(cipherMapIndex, cipherMap.length, shiftNumber)
 
     if (value === lowCaseValue) {
       return cipherMap[encodedElIndex]
@@ -30,7 +32,7 @@ class Cipher {
   _getShiftedIndex (mapIndex, mapLength, shiftNumber) {
     const shiftedIndex = mapIndex + shiftNumber
 
-    if (shiftedIndex > mapLength - 1) {
+    if (shiftedIndex > (mapLength - 1)) {
       return shiftedIndex - mapLength
     }
     return shiftedIndex
@@ -42,7 +44,7 @@ class Cipher {
     if (shiftedIndex >= 0) {
       return shiftedIndex
     }
-    return mapLength - shiftedIndex
+    return (mapLength - (-shiftedIndex))
   }
 
   encode (inputString, inputNumber) {
