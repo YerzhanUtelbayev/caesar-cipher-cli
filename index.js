@@ -1,5 +1,7 @@
 const { pipeline } = require('stream')
+const fs = require('fs')
 
+const { getAbsolutePath } = require('./config')
 const program = require('./src/optionsParser')
 const validate = require('./src/validator')
 const CipherTransform = require('./src/transformStream')
@@ -11,10 +13,19 @@ const rawOptions = program.opts()
 const options = validate(rawOptions)
 const transform = new CipherTransform(options)
 
+const readable = options.inputFile ? fs.createReadStream(getAbsolutePath(options.inputFile), {
+  encoding: 'utf8'
+}) : null
+
+const writeable = options.outputFile ? fs.createWriteStream(getAbsolutePath(options.outputFile), {
+  encoding: 'utf8',
+  flags: 'a+'
+}) : null
+
 pipeline(
-  process.stdin,
+  options.inputFile ? readable : process.stdin,
   transform,
-  process.stdout,
+  options.outputFile ? writeable : process.stdout,
   err => {
     if (err) {
       console.log('Pipeline failed: ')
