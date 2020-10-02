@@ -20,7 +20,7 @@ const validate = ({ shift, action, input, output }) => {
   if (typeof shiftNumber === 'number' && !isNaN(shiftNumber)) {
     result.shiftNumber = shiftNumber
   } else {
-    result.shiftNumber = 1
+    throw new ValidationError('Provide shift number. It should be integer')
   }
 
   if (input && !isValid(input)) {
