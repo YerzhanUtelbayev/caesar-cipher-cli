@@ -1,3 +1,4 @@
+const fs = require('fs')
 const isValid = require('is-valid-path')
 
 class ValidationError extends Error {
@@ -25,13 +26,19 @@ const validate = ({ shift, action, input, output }) => {
   if (input && !isValid(input)) {
     throw new ValidationError('Invalid file path was provided')
   } else if (input) {
-    result.inputFile = input
+    if (!fs.existsSync(input)) {
+      throw new ValidationError(`Path ${input} doesn't exist`)
+    }
+    result.inputFile = String(input)
   }
 
   if (output && !isValid(output)) {
     throw new ValidationError('Invalid file path was provided')
   } else if (output) {
-    result.outputFile = output
+    if (!fs.existsSync(output)) {
+      throw new ValidationError(`Path ${output} doesn't exist`)
+    }
+    result.outputFile = String(output)
   }
 
   return result
