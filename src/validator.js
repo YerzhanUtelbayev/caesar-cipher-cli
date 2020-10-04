@@ -1,3 +1,4 @@
+const path = require('path')
 const fs = require('fs')
 const isValid = require('is-valid-path')
 
@@ -26,19 +27,21 @@ const validate = ({ shift, action, input, output }) => {
   if (input && !isValid(input)) {
     throw new ValidationError('Invalid file path was provided')
   } else if (input) {
-    if (!fs.existsSync(input)) {
+    const inputPath = path.resolve(String(input))
+    if (!fs.existsSync(inputPath)) {
       throw new ValidationError(`Path ${input} doesn't exist`)
     }
-    result.inputFile = String(input)
+    result.inputFile = inputPath
   }
 
   if (output && !isValid(output)) {
     throw new ValidationError('Invalid file path was provided')
   } else if (output) {
-    if (!fs.existsSync(output)) {
+    const outputPath = path.resolve(String(output))
+    if (!fs.existsSync(outputPath)) {
       throw new ValidationError(`Path ${output} doesn't exist`)
     }
-    result.outputFile = String(output)
+    result.outputFile = outputPath
   }
 
   return result
