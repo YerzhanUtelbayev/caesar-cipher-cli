@@ -21,11 +21,11 @@ class CipherTransform extends Transform {
     }
 
     if (this.options.action === ACTION_TYPES.ENCODE) {
-      chunk = this._cipher.encode(chunk, this.options.shiftNumber)
+      chunk = this._cipher.encode(chunk, this.options.shiftNumber) + '\n'
     }
 
     if (this.options.action === ACTION_TYPES.DECODE) {
-      chunk = this._cipher.decode(chunk, this.options.shiftNumber)
+      chunk = this._cipher.decode(chunk, this.options.shiftNumber) + '\n'
     }
 
     callback(null, chunk)
