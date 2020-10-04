@@ -21,7 +21,6 @@ class CipherTransform extends Transform {
     }
 
     if (this.options.action === ACTION_TYPES.ENCODE) {
-      console.log(chunk)
       chunk = this._cipher.encode(chunk, this.options.shiftNumber)
     }
 
