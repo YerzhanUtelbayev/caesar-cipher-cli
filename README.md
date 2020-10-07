@@ -6,8 +6,8 @@ Project was built using Node v12.18.4
 ### Accepted options
 * -a, --action: an action encode/decode (required)
 * -s, --shift: a shift (required)
-* -i, --input: an input file. If missed console input would be used instead.
-* -o, --output: an output file. If missed console ouput would be used instead.
+* -i, --input: an input file. If missed, console input would be used instead.
+* -o, --output: an output file. If missed, console output would be used instead.
 
 ### Usage examples
 First, installation of node modules is needed (```npm install```)
