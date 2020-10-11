@@ -16,6 +16,8 @@ try {
   const readable = options.inputFile
     ? fs.createReadStream(options.inputFile, {
       encoding: 'utf8'
+    }).on('error', (error) => {
+      throw new Error(error.message)
     })
     : null
 
@@ -23,6 +25,8 @@ try {
     ? fs.createWriteStream(options.outputFile, {
       encoding: 'utf8',
       flags: 'a+'
+    }).on('error', (error) => {
+      throw new Error(error.message)
     })
     : null
 
@@ -40,4 +44,5 @@ try {
   )
 } catch (error) {
   process.stderr.write(`${error.message}\n`)
+  process.exit(13)
 }
