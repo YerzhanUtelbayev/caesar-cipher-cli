@@ -2,8 +2,7 @@ const convert = (cipherString) => (inputString, inputNumber, getIndex) => {
   if (typeof inputString !== 'string') return
 
   const cipherMap = cipherString.split('')
-  const lastElIndex = cipherMap.length - 1
-  const shiftNumber = inputNumber % lastElIndex
+  const shiftNumber = inputNumber % cipherMap.length
   const inputSymbolsList = inputString.split('')
 
   const encodedList = inputSymbolsList.map((value) => {
